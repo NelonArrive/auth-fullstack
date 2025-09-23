@@ -1,9 +1,22 @@
 'use client'
 
-import { PropsWithChildren } from 'react'
+import { type PropsWithChildren } from 'react'
 
 import { TanstackQueryProvider } from './TanstackQueryProvider'
+import { ThemeProvider } from './ThemeProvider'
+import { ToastProvider } from './ToastProvider'
 
 export function MainProvider({ children }: PropsWithChildren<unknown>) {
-	return <TanstackQueryProvider>{children}</TanstackQueryProvider>
+	return (
+		<TanstackQueryProvider>
+			<ThemeProvider
+				attribute='class'
+				defaultTheme='light'
+				disableTransitionOnChange
+			>
+				<ToastProvider />
+				{children}
+			</ThemeProvider>
+		</TanstackQueryProvider>
+	)
 }

@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { Geist_Mono } from 'next/font/google'
 
+import { ToggleTheme } from '@/shared/components/ui'
 import { MainProvider } from '@/shared/providers'
 import '@/shared/styles/globals.css'
 
@@ -24,9 +25,16 @@ export default function RootLayout({
 	children: React.ReactNode
 }>) {
 	return (
-		<html lang='ru'>
+		<html lang='ru' suppressHydrationWarning>
 			<body className={geistMono.className}>
-				<MainProvider>{children}</MainProvider>
+				<MainProvider>
+					<div className='relative flex min-h-screen flex-col'>
+						<ToggleTheme />
+						<div className='flex h-screen w-full items-center justify-center px-4'>
+							{children}
+						</div>
+					</div>
+				</MainProvider>
 			</body>
 		</html>
 	)
