@@ -4,6 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { Eye, EyeOff } from 'lucide-react'
 import { useTheme } from 'next-themes'
 import { useState } from 'react'
+import ReCAPTCHA from 'react-google-recaptcha'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 
@@ -18,10 +19,10 @@ import {
 	Input
 } from '@/shared/components/ui'
 
+import { useLoginMutation } from '../hooks/useLoginMutation'
 import { LoginSchema, TypeLoginSchema } from '../schemes'
 
 import { AuthWrapper } from './AuthWrapper'
-import ReCAPTCHA from 'react-google-recaptcha'
 
 export function LoginForm() {
 	const [showPassword, setShowPassword] = useState(false)
@@ -38,9 +39,11 @@ export function LoginForm() {
 		}
 	})
 
+	const { login, isLoadingLogin } = useLoginMutation()
+
 	const onSubmit = (values: TypeLoginSchema) => {
 		if (recaptchaValue) {
-			console.log(values)
+			login({ values, recaptcha: recaptchaValue })
 		} else {
 			toast.error('Пожалуйста, завершите reCAPTCHA')
 		}
@@ -80,6 +83,7 @@ export function LoginForm() {
 								<FormLabel>Почта</FormLabel>
 								<FormControl>
 									<Input
+										disabled={isLoadingLogin}
 										placeholder='example@email.com'
 										type='email'
 										{...field}
@@ -98,6 +102,7 @@ export function LoginForm() {
 								<FormControl>
 									<div className='relative'>
 										<Input
+											disabled={isLoadingLogin}
 											placeholder='********'
 											type={showPassword ? 'text' : 'password'}
 											{...field}
@@ -128,7 +133,9 @@ export function LoginForm() {
 							theme={theme === 'light' ? 'light' : 'dark'}
 						/>
 					</div>
-					<Button type='submit'>Войти в аккаунт</Button>
+					<Button disabled={isLoadingLogin} type='submit'>
+						Войти в аккаунт
+					</Button>
 				</form>
 			</Form>
 		</AuthWrapper>

@@ -15,12 +15,9 @@ export function useRegisterMutation() {
 	const { mutate: register, isPending: isLoadingRegister } = useMutation({
 		mutationKey: ['register user'],
 		mutationFn: ({ values, recaptcha }: IRegisterMutation) =>
-			authService.register(values),
-		onSuccess() {
-			toast.success('Успешная регистрация', {
-				description:
-					'Подтвердите почту. Сообщение было отправлено на ваш почтовый адрес.'
-			})
+			authService.register(values, recaptcha),
+		onSuccess(data: any) {
+			toastMessageHandler(data)
 		},
 		onError(err) {
 			toastMessageHandler(err)
