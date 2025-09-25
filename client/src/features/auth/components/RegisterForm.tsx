@@ -19,6 +19,7 @@ import {
 	Input
 } from '@/shared/components/ui'
 
+import { useRegisterMutation } from '../hooks'
 import { RegisterSchema, TypeRegisterSchema } from '../schemes'
 
 import { AuthWrapper } from './AuthWrapper'
@@ -40,9 +41,11 @@ export function RegisterForm() {
 		}
 	})
 
+	const { isLoadingRegister, register } = useRegisterMutation()
+
 	const onSubmit = (values: TypeRegisterSchema) => {
 		if (recaptchaValue) {
-			console.log(values)
+			register({ values, recaptcha: recaptchaValue })
 		} else {
 			toast.error('Пожалуйста, завершите reCAPTCHA')
 		}
@@ -68,7 +71,11 @@ export function RegisterForm() {
 							<FormItem>
 								<FormLabel>Имя</FormLabel>
 								<FormControl>
-									<Input placeholder='Ваше имя' {...field} />
+									<Input
+										placeholder='Ваше имя'
+										disabled={isLoadingRegister}
+										{...field}
+									/>
 								</FormControl>
 								<FormMessage />
 							</FormItem>
@@ -83,6 +90,7 @@ export function RegisterForm() {
 								<FormControl>
 									<Input
 										placeholder='example@email.com'
+										disabled={isLoadingRegister}
 										type='email'
 										{...field}
 									/>
@@ -101,6 +109,7 @@ export function RegisterForm() {
 									<div className='relative'>
 										<Input
 											placeholder='********'
+											disabled={isLoadingRegister}
 											type={showPassword ? 'text' : 'password'}
 											{...field}
 										/>
@@ -133,6 +142,7 @@ export function RegisterForm() {
 									<div className='relative'>
 										<Input
 											placeholder='********'
+											disabled={isLoadingRegister}
 											type={showPasswordRepeat ? 'text' : 'password'}
 											{...field}
 										/>
@@ -162,7 +172,9 @@ export function RegisterForm() {
 							theme={theme === 'light' ? 'light' : 'dark'}
 						/>
 					</div>
-					<Button type='submit'>Создать аккаунт</Button>
+					<Button disabled={isLoadingRegister} type='submit'>
+						Создать аккаунт
+					</Button>
 				</form>
 			</Form>
 		</AuthWrapper>
