@@ -1,0 +1,48 @@
+import { LogOut } from 'lucide-react'
+
+import { IUser } from '@/features/auth/types'
+
+import {
+	Avatar,
+	AvatarFallback,
+	AvatarImage,
+	DropdownMenu,
+	DropdownMenuContent,
+	DropdownMenuItem,
+	DropdownMenuTrigger,
+	Skeleton
+} from '@/shared/components/ui'
+import { useProfile } from '@/shared/hook'
+
+import { useLogoutMutation } from '../hooks'
+
+interface IUserButton {
+	user: IUser
+}
+
+export function UserButton({ user }: IUserButton) {
+	const { logout, isLoadingLogout } = useLogoutMutation()
+
+	if (!user) return null
+
+	return (
+		<DropdownMenu>
+			<DropdownMenuTrigger>
+				<Avatar>
+					<AvatarImage src={user.picture} />
+					<AvatarFallback>{user.displayName.slice(0, 1)}</AvatarFallback>
+				</Avatar>
+			</DropdownMenuTrigger>
+			<DropdownMenuContent className='w-40 cursor-pointer' align='end'>
+				<DropdownMenuItem disabled={isLoadingLogout} onClick={() => logout()}>
+					<LogOut className='mr-2 size-4' />
+					Выйти
+				</DropdownMenuItem>
+			</DropdownMenuContent>
+		</DropdownMenu>
+	)
+}
+
+export function UserButtonLoading() {
+	return <Skeleton className='h-10 w-10 rounded-full' />
+}

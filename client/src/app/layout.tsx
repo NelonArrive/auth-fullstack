@@ -12,8 +12,8 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
 	title: {
-		absolute: 'Авторизация',
-		template: '%s | Авторизация'
+		absolute: 'NelonAuth',
+		template: '%s | NelonAuth'
 	},
 	description:
 		'Полноценная, профессиональная авторизация реализованная на данном проекте'

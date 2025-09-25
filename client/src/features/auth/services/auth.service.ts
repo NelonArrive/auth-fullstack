@@ -7,25 +7,34 @@ class AuthService {
 	public async register(body: TypeRegisterSchema, recaptcha?: string) {
 		const headers = recaptcha ? { recaptcha } : undefined
 
-		const response = await api.post<IUser>('auth/register', body, {
+		const res = await api.post<IUser>('auth/register', body, {
 			headers
 		})
 
-		return response
+		return res
 	}
 
 	public async login(body: TypeLoginSchema, recaptcha?: string) {
 		const headers = recaptcha ? { recaptcha } : undefined
 
-		const response = await api.post<IUser>('auth/login', body, {
+		const res = await api.post<IUser>('auth/login', body, {
 			headers
 		})
 
-		return response
+		return res
+	}
+
+	public async oauthByProvider(provider: 'google' | 'yandex') {
+		const res = await api.get<{ url: string }>(
+			`auth/oauth/connect/${provider}`
+		)
+
+		return res
 	}
 
 	public async logout() {
-		const response = await api.post('auth/logout')
+		const res = await api.post('auth/logout')
+		return res
 	}
 }
 
